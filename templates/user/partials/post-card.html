@@ -1,0 +1,20 @@
+<div class="border-b pb-6 mb-6">
+    <div class="flex items-center mb-4">
+        <img src="{{ post.user.avatar }}" class="w-12 h-12 rounded-full mr-4">
+        <div>
+            <h4 class="font-semibold">{{ post.user.name }}</h4>
+            <p class="text-gray-500 text-sm">{{ post.fecha }}</p>
+        </div>
+    </div>
+    <p class="mb-4">{{ post.contenido }}</p>
+    <div class="flex space-x-4">
+        <button class="flex items-center text-gray-500">
+            <svg class="w-5 h-5 mr-1">...</svg>
+            {{ post.likes }}
+        </button>
+        <button class="flex items-center text-gray-500">
+            <svg class="w-5 h-5 mr-1">...</svg>
+            Comentar
+        </button>
+    </div>
+</div>

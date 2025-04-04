@@ -1,0 +1,296 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+<div class="px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="sm:flex sm:items-center mb-8">
+        <div class="sm:flex-auto">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Panel de Administración</h1>
+            <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Resumen completo y métricas clave del sistema</p>
+        </div>
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <i class="fas fa-download mr-2"></i> Generar Reporte
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+        <!-- Total Users -->
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                        <i class="fas fa-users text-white text-xl"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Usuarios Totales</dt>
+                            <dd>
+                                <div class="text-lg font-medium text-gray-900 dark:text-white">1,248</div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-sm font-medium text-green-600 dark:text-green-400">
+                        +12.5%
+                    </span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">vs último mes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Sessions -->
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                        <i class="fas fa-user-clock text-white text-xl"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Sesiones Activas</dt>
+                            <dd>
+                                <div class="text-lg font-medium text-gray-900 dark:text-white">86</div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-sm font-medium text-green-600 dark:text-green-400">
+                        +8.2%
+                    </span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">vs ayer</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collection Points -->
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                        <i class="fas fa-recycle text-white text-xl"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Puntos de Recolección</dt>
+                            <dd>
+                                <div class="text-lg font-medium text-gray-900 dark:text-white">42</div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-sm font-medium text-green-600 dark:text-green-400">
+                        +3 nuevos
+                    </span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">esta semana</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avg. Response Time -->
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                        <i class="fas fa-stopwatch text-white text-xl"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Tiempo Respuesta</dt>
+                            <dd>
+                                <div class="text-lg font-medium text-gray-900 dark:text-white">2.4s</div>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-sm font-medium text-red-600 dark:text-red-400">
+                        -0.8s
+                    </span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">vs mes pasado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- User Growth Chart -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-medium text-gray-900 dark:text-white">Crecimiento de Usuarios</h2>
+                <select class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option>Últimos 30 días</option>
+                    <option>Últimos 90 días</option>
+                    <option>Este año</option>
+                </select>
+            </div>
+            <div id="userGrowthChart" class="h-80"></div>
+        </div>
+
+        <!-- Activity Distribution -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Distribución de Actividad</h2>
+            <div id="activityChart" class="h-80"></div>
+        </div>
+    </div>
+
+    <!-- Recent Activity & Quick Actions -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Recent Users -->
+        <div class="lg:col-span-2 bg-white dark:bg-gray-800 shadow rounded-lg">
+            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h2 class="text-lg font-medium text-gray-900 dark:text-white">Usuarios Recientes</h2>
+                <a href="{{ url_for('admin_users') }}" class="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">Ver todos</a>
+            </div>
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                {% for user in recent_users %}
+                <div class="px-6 py-4 flex items-center hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <img class="w-10 h-10 rounded-full" src="{{ user.avatar }}" alt="{{ user.name }}">
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">{{ user.name }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ user.email }}</p>
+                    </div>
+                    <div class="ml-auto">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full {{ 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' if user.active else 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' }}">
+                            {{ 'Activo' if user.active else 'Inactivo' }}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-medium text-gray-900 dark:text-white">Acciones Rápidas</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 gap-4">
+                    <a href="{{ url_for('admin_users') }}" class="group flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                        <div class="flex-shrink-0 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 p-2 rounded-lg">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">Agregar Usuario</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Registrar nuevo usuario manualmente</p>
+                        </div>
+                    </a>
+                    <a href="#" class="group flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors">
+                        <div class="flex-shrink-0 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 p-2 rounded-lg">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400">Enviar Anuncio</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Notificar a todos los usuarios</p>
+                        </div>
+                    </a>
+                    <a href="#" class="group flex items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors">
+                        <div class="flex-shrink-0 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 p-2 rounded-lg">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400">Configuración del Sistema</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Ajustes generales de la plataforma</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Inicializar gráficos cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gráfico de crecimiento de usuarios
+        const userGrowthOptions = {
+            series: [{
+                name: 'Usuarios Registrados',
+                data: [30, 40, 35, 50, 49, 60, 70, 91, 125, 150, 180, 210]
+            }],
+            chart: {
+                height: '100%',
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#3B82F6'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            xaxis: {
+                categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            },
+            tooltip: {
+                enabled: true,
+                theme: 'dark'
+            }
+        };
+
+        const userGrowthChart = new ApexCharts(document.querySelector("#userGrowthChart"), userGrowthOptions);
+        userGrowthChart.render();
+
+        // Gráfico de distribución de actividad
+        const activityOptions = {
+            series: [44, 55, 13, 43, 22],
+            labels: ['Web', 'Móvil', 'API', 'Admin', 'Otros'],
+            chart: {
+                type: 'donut',
+                height: '100%'
+            },
+            colors: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            legend: {
+                position: 'bottom',
+                labels: {
+                    colors: ['#6B7280']
+                }
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Actividad',
+                                color: '#6B7280'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const activityChart = new ApexCharts(document.querySelector("#activityChart"), activityOptions);
+        activityChart.render();
+    });
+</script>
+{% endblock %}

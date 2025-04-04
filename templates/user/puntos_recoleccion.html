@@ -1,0 +1,48 @@
+{% extends "base_user.html" %}
+
+{% block title %}Puntos de Recolección{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">Puntos de Recolección</h1>
+    <p class="text-gray-600 mb-6">Encuentra los puntos de recolección más cercanos a ti y descubre qué tipo de residuos aceptan.</p>
+
+    <!-- Barra de búsqueda y filtros -->
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+        <div class="flex-grow relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+            <input type="search" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Buscar por ubicación o nombre">
+        </div>
+        <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            Filtros
+        </button>
+        <div class="flex bg-gray-100 rounded-md p-1">
+            <button class="px-3 py-1 text-sm font-medium rounded-md bg-white text-gray-700">Mapa</button>
+            <button class="px-3 py-1 text-sm font-medium rounded-md text-gray-700">Lista</button>
+        </div>
+    </div>
+
+    <!-- Mapa (placeholder) -->
+    <div class="bg-gray-200 rounded-lg h-96 mb-6" style="background-image: url('https://carbootdirectory.co.uk/wp-content/uploads/2022/11/BrickLaneMarket.jpg'); background-size: cover; background-position: center;"></div>
+
+    <!-- Lista de puntos -->
+    <div class="space-y-4">
+        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+            <h3 class="font-medium">Centro de Reciclaje Alcanfores</h3>
+            <p class="text-sm text-gray-600">Acepta: Plástico, Papel, Vidrio, Metal</p>
+            <p class="text-sm text-gray-500 mt-2 flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Parque Alcanfores, Querétaro
+            </p>
+            <span class="inline-block mt-2 px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">0.8 km</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+<div class="mt-10 px-6">
+    <!-- Encabezado y controles -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Notificaciones</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">Gestiona las notificaciones del sistema</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex space-x-3">
+            <button class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg flex items-center dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                </svg>
+                Filtrar
+            </button>
+            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Nueva
+            </button>
+        </div>
+    </div>
+
+    <!-- Panel de notificaciones -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+            <!-- Lista de notificaciones -->
+            <div class="border-r border-gray-200 dark:border-gray-700">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Todas las notificaciones</h2>
+                    <div class="flex items-center">
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full dark:bg-blue-900 dark:text-blue-200">0</span>
+                    </div>
+                </div>
+                <div class="divide-y divide-gray-200 dark:divide-gray-700 max-h-[calc(100vh-250px)] overflow-y-auto">
+                    <!-- Ejemplo de notificación -->
+                    <div class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-start">
+                            <input type="checkbox" class="mt-1 rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                            <div class="ml-3 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">Título de la notificación</p>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">Hace 2h</span>
+                                </div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate">Descripción breve de la notificación que puede ser más larga...</p>
+                                <div class="mt-2 flex items-center">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                        Sistema
+                                    </span>
+                                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                        No leído
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Más notificaciones -->
+                </div>
+            </div>
+
+            <!-- Vista previa -->
+            <div class="lg:col-span-2">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Vista previa</h2>
+                </div>
+                <div class="p-6">
+                    <div class="max-w-3xl mx-auto">
+                        <div class="text-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Selecciona una notificación</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mt-2">Selecciona una notificación de la lista para ver su contenido completo</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                            </svg>
+                            <h3 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">Sin notificación seleccionada</h3>
+                            <p class="mt-1 text-gray-500 dark:text-gray-400">Selecciona una notificación de la lista para ver los detalles.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

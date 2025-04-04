@@ -1,0 +1,124 @@
+{% extends "auth/base_auth.html" %}
+{% block content %}
+<div class="w-full bg-white rounded-lg shadow-md overflow-hidden p-8">
+    <div class="mb-10 text-center">
+        <h2 class="text-3xl font-bold text-gray-800">Únete a Ecommunity</h2>
+        <p class="mt-2 text-gray-600">Crea tu cuenta para empezar</p>
+    </div>
+
+    <!-- Mostrar mensajes Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mb-4 p-4 bg-red-50 rounded-lg">
+                <ul class="text-sm text-red-600">
+                    {% for category, message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('register') }}" class="space-y-6">
+        <!-- Nombre Completo -->
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Nombre Completo</label>
+            <input 
+                id="name" 
+                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm p-2 border" 
+                type="text" 
+                name="name" 
+                required 
+                autofocus 
+                placeholder="Ej: Juan Pérez"
+            >
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+            <input 
+                id="email" 
+                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm p-2 border" 
+                type="email" 
+                name="email" 
+                required 
+                placeholder="Ej: ejemplo@ecommunity.com"
+            >
+        </div>
+
+        <!-- Tipo de Usuario (Alineado con el Enum de SQLAlchemy) -->
+        <div>
+            <label for="role" class="block text-sm font-medium text-gray-700">Tipo de Cuenta</label>
+            <select 
+                id="role" 
+                name="role" 
+                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm p-2 border" 
+                required
+            >
+                <option value="" disabled selected>Selecciona tu tipo de cuenta</option>
+                <option value="usuario">Usuario Individual</option>
+                <option value="admin">Administrador</option>
+            </select>
+        </div>
+
+        <!-- Contraseña -->
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input 
+                id="password" 
+                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm p-2 border" 
+                type="password" 
+                name="password" 
+                required 
+                placeholder="Mínimo 8 caracteres"
+            >
+            <p class="mt-1 text-xs text-gray-500">La contraseña debe tener al menos 8 caracteres.</p>
+        </div>
+
+        <!-- Confirmar Contraseña (Validación en frontend) -->
+        <div>
+            <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
+            <input 
+                id="password_confirmation" 
+                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm p-2 border" 
+                type="password" 
+                name="password_confirmation" 
+                required 
+                placeholder="Repite tu contraseña"
+            >
+        </div>
+
+        <!-- Términos y Condiciones -->
+        <div class="flex items-start">
+            <div class="flex items-center h-5">
+                <input 
+                    id="terms" 
+                    name="terms" 
+                    type="checkbox" 
+                    class="rounded border-gray-300 text-indigo-600 shadow-sm" 
+                    required
+                >
+            </div>
+            <div class="ml-3">
+                <label for="terms" class="text-sm text-gray-600">
+                    Acepto los <a href="#" class="text-indigo-600 hover:text-indigo-500 underline">Términos</a> y <a href="#" class="text-indigo-600 hover:text-indigo-500 underline">Política de Privacidad</a>
+                </label>
+            </div>
+        </div>
+
+        <!-- Botón de Registro -->
+        <div class="flex items-center justify-between mt-6">
+            <a href="{{ url_for('login') }}" class="underline text-sm text-gray-600 hover:text-gray-900">
+                ¿Ya tienes una cuenta?
+            </a>
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md flex items-center">
+                Registrarse
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommunity - {{ title if title else 'Login' }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .bg-image-container {
+            background-image: url("{{ url_for('static', filename='images/Portada.jpg') }}");
+            background-size: cover;
+            background-position: center;
+        }
+        @media (max-width: 1023px) {
+            .bg-image-container { display: none; }
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <div class="min-h-screen flex flex-col lg:flex-row">
+        <!-- Columna izquierda (imagen) -->
+        <div class="hidden lg:block lg:w-1/2 bg-image-container bg-green-600 bg-opacity-80 bg-blend-multiply">
+            <div class="h-full flex flex-col justify-center items-center text-center p-12 text-white">
+                <h2 class="text-4xl font-bold mb-6">Bienvenido a Ecommunity</h2>
+                <p class="text-xl max-w-md">El mejor sistema de reciclaje comunitario</p>
+            </div>
+        </div>
+
+        <!-- Columna derecha (formulario) -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-6 bg-white">
+            <div class="w-full max-w-md">
+                <!-- Logo en móvil -->
+                <div class="lg:hidden mb-8 text-center">
+                    <h2 class="mt-4 text-2xl font-bold text-gray-800">Bienvenido a Ecommunity</h2>
+                </div>
+
+                <!-- Contenido dinámico -->
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

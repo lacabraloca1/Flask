@@ -1,0 +1,88 @@
+{% extends "base_user.html" %}
+
+{% block title %}Comentarios{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <!-- Publicación principal -->
+    <div class="border-b border-gray-200 pb-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center">
+                <img src="https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png" alt="Usuario" class="h-10 w-10 rounded-full mr-3">
+                <div>
+                    <p class="font-medium">Usuario 1</p>
+                    <p class="text-xs text-gray-500">Hace 1 hora</p>
+                </div>
+            </div>
+            <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">Destacado</span>
+        </div>
+        
+        <p class="mb-4">¡Hoy participé en la jornada de limpieza del Parque Alcanfores! Recolectamos más de 50kg de residuos que serán reciclados. ¡Únete a la próxima jornada!</p>
+        
+        <!-- Imagen de la publicación -->
+        <div class="bg-gray-200 rounded-lg h-64 mb-4" style="background-image: url('https://i.pinimg.com/originals/2c/fc/3e/2cfc3e9089c046f7cc7f8afae9d49172.jpg'); background-size: cover; background-position: center;"></div>
+        
+        <!-- Etiquetas -->
+        <div class="flex flex-wrap gap-2 mb-4">
+            <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">#TipDeReciclaje</span>
+            <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">#Querétaro</span>
+            <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">#MedioAmbiente</span>
+        </div>
+        
+        <!-- Acciones -->
+        <div class="flex justify-between">
+            <button class="flex items-center text-gray-500 hover:text-green-600">
+                <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+                <span>12</span>
+            </button>
+            <button class="flex items-center text-gray-500 hover:text-green-600">
+                <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <span>5</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Sección de comentarios -->
+    <h2 class="text-xl font-semibold mb-4">Comentarios (5)</h2>
+    
+    <!-- Formulario para nuevo comentario -->
+    <div class="mb-6">
+        <div class="flex">
+            <img src="https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png" alt="Tu perfil" class="h-10 w-10 rounded-full mr-3">
+            <textarea class="flex-grow border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500" rows="3" placeholder="Escribe un comentario..."></textarea>
+        </div>
+        <div class="flex justify-end mt-2">
+            <button class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                Comentar
+            </button>
+        </div>
+    </div>
+    
+    <!-- Lista de comentarios -->
+    <div class="space-y-4">
+        <!-- Ejemplo de comentario -->
+        <div class="border-b border-gray-200 pb-4">
+            <div class="flex justify-between">
+                <div class="flex items-center mb-2">
+                    <img src="https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png" alt="Usuario" class="h-8 w-8 rounded-full mr-2">
+                    <p class="font-medium">Usuario 2</p>
+                </div>
+                <p class="text-xs text-gray-500">Hace 30 minutos</p>
+            </div>
+            <p class="text-gray-700 ml-10">¡Excelente iniciativa! Me encantaría participar en la próxima jornada. ¿Hay que llevar algo en particular?</p>
+            <div class="flex items-center ml-10 mt-1">
+                <button class="flex items-center text-gray-500 hover:text-green-600 text-sm">
+                    <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                    <span>3</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

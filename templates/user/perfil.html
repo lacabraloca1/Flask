@@ -1,0 +1,137 @@
+{% extends "base_user.html" %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block styles %}
+<style>
+    .profile-banner {
+        background-image: url('https://s1.1zoom.me/big0/925/349524-admin.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 18rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Banner de perfil -->
+<div class="relative profile-banner rounded-t-lg">
+    <div class="absolute -bottom-16 left-6">
+        <img src="https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png" alt="Perfil" class="h-32 w-32 rounded-full border-4 border-white">
+    </div>
+    <div class="absolute bottom-4 right-6 flex space-x-2">
+        <button class="p-2 bg-white rounded-full text-gray-700 hover:bg-gray-100">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+            </svg>
+        </button>
+        <button class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 flex items-center">
+            <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            Editar Perfil
+        </button>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded-lg mt-16">
+    <!-- Información del perfil -->
+    <div class="px-6 py-4">
+        <h1 class="text-3xl font-bold text-gray-800">Usuario 1</h1>
+        <p class="text-gray-600">Querétaro, México - Miembro desde 2024</p>
+        <p class="mt-2 text-gray-700">Entusiasta del reciclaje y defensor del medio ambiente. Trabajando para hacer de Querétaro una ciudad más sostenible.</p>
+    </div>
+
+    <!-- Pestañas -->
+    <div class="border-t border-gray-200">
+        <nav class="flex -mb-px">
+            <a href="#" class="border-b-2 border-green-500 text-green-600 px-4 py-4 text-sm font-medium">Publicaciones</a>
+            <a href="#" class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 px-4 py-4 text-sm font-medium">Actividad</a>
+            <a href="#" class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 px-4 py-4 text-sm font-medium">Logros</a>
+            <a href="#" class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 px-4 py-4 text-sm font-medium">Recompensas</a>
+        </nav>
+    </div>
+
+    <!-- Contenido de las pestañas -->
+    <div class="px-6 py-4">
+        <!-- Estadísticas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h3 class="text-gray-600 text-sm font-medium">Nivel Ecológico</h3>
+                <p class="text-2xl font-bold">Nivel 4</p>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div class="bg-green-600 h-2 rounded-full" style="width: 45%"></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">65% para el siguiente nivel</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h3 class="text-gray-600 text-sm font-medium">Puntos Eco</h3>
+                <p class="text-2xl font-bold">2,450</p>
+                <p class="text-xs text-gray-500 mt-1">+150 esta semana</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h3 class="text-gray-600 text-sm font-medium">Residuos Reciclados</h3>
+                <p class="text-2xl font-bold">78 Kg</p>
+                <p class="text-xs text-gray-500 mt-1">Impacto positivo</p>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                <h3 class="text-gray-600 text-sm font-medium">Logros</h3>
+                <p class="text-2xl font-bold">12/24</p>
+                <p class="text-xs text-gray-500 mt-1">Desbloquea más reciclando</p>
+            </div>
+        </div>
+
+        <!-- Publicaciones del usuario -->
+        <div class="border border-gray-200 rounded-lg p-4 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Tus publicaciones</h2>
+            <p class="text-gray-600 mb-4">Comparte tus experiencias y consejos con la comunidad</p>
+            <button class="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Crear nueva publicación
+            </button>
+        </div>
+
+        <!-- Ejemplo de publicación -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden mb-6">
+            <div class="p-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="https://i.pinimg.com/originals/07/33/ba/0733ba760b29378474dea0fdbcb97107.png" alt="Usuario" class="h-10 w-10 rounded-full mr-3">
+                    <div>
+                        <p class="font-medium">Usuario 1</p>
+                        <p class="text-xs text-gray-500">Hace 1 hora</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-4 pb-4">
+                <p class="mb-4">¡Hoy participé en la jornada de limpieza del Parque Alcanfores! Recolectamos más de 50kg de residuos que serán reciclados. ¡Únete a la próxima jornada!</p>
+                
+                <div class="bg-gray-200 rounded-lg h-64 mb-4" style="background-image: url('https://i.pinimg.com/originals/2c/fc/3e/2cfc3e9089c046f7cc7f8afae9d49172.jpg'); background-size: cover; background-position: center;"></div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">#TipDeReciclaje</span>
+                    <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">#Querétaro</span>
+                    <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">#MedioAmbiente</span>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 px-4 py-3 flex justify-between">
+                <button class="flex items-center text-gray-500 hover:text-green-600">
+                    <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                    <span>12</span>
+                </button>
+                <button class="flex items-center text-gray-500 hover:text-green-600">
+                    <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    <span>5</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

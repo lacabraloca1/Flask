@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommunity - Admin</title>
+    
+    <!-- Flowbite CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Terminal CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" rel="stylesheet">
+    
+    <!-- Estilos personalizados -->
+    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+</head>
+<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
+    <!-- Navbar Superior -->
+    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <div class="px-4 py-3 lg:px-6">
+            <div class="flex items-center justify-between">
+                <!-- Botón para mobile sidebar -->
+                <div class="flex items-center">
+                    <button id="sidebarToggle" class="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <a href="{{ url_for('admin_dashboard') }}" class="flex items-center">
+                        <span class="self-center text-2xl font-bold whitespace-nowrap dark:text-white">Ecommunity</span>
+                    </a>
+                </div>
+                
+                <!-- Menú usuario y notificaciones -->
+                <div class="flex items-center space-x-4">
+                    <!-- Botón de terminal -->
+                    <button id="terminalToggle" class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400">
+                        <i class="fas fa-terminal"></i>
+                    </button>
+                    
+                    <!-- Botón de notificaciones -->
+                    <button type="button" class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 relative">
+                        <i class="fas fa-bell"></i>
+                        <span class="sr-only">Notificaciones</span>
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full -top-1 -right-1 dark:border-gray-900">3</span>
+                    </button>
+                    
+                    <!-- Menú usuario -->
+                    <div class="relative">
+                        <button id="userMenuButton" type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+                            <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+                        </button>
+                        <!-- Dropdown usuario -->
+                        <div id="userMenuDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg dark:bg-gray-700 z-50">
+                            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                                <p class="text-sm text-gray-900 dark:text-white">Administrador</p>
+                                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300">admin@ecommunity.com</p>
+                            </div>
+                            <ul class="py-1">
+                                <li>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600">
+                                        <i class="fas fa-user mr-2"></i> Perfil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600">
+                                        <i class="fas fa-cog mr-2"></i> Configuración
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('auth_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600">
+                                        <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full lg:translate-x-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <div class="h-full px-3 pb-4 overflow-y-auto">
+            <ul class="space-y-2 font-medium">
+                <li>
+                    <a href="{{ url_for('admin_dashboard') }}" class="flex items-center p-2 rounded-lg group {% if request.endpoint == 'admin.dashboard' %}text-white bg-blue-600{% else %}text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700{% endif %}">
+                        <i class="fas fa-tachometer-alt w-5 h-5"></i>
+                        <span class="ml-3">Dashboard</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{{ url_for('admin_users') }}" class="flex items-center p-2 rounded-lg group {% if request.endpoint == 'admin.users' %}text-white bg-blue-600{% else %}text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700{% endif %}">
+                        <i class="fas fa-users w-5 h-5"></i>
+                        <span class="ml-3">Usuarios</span>
+                        <span class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300">15</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{{ url_for('admin_community') }}" class="flex items-center p-2 rounded-lg group {% if request.endpoint == 'admin.community' %}text-white bg-blue-600{% else %}text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700{% endif %}">
+                        <i class="fas fa-users-between-lines w-5 h-5"></i>
+                        <span class="ml-3">Comunidad</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{{ url_for('admin_notifications') }}" class="flex items-center p-2 rounded-lg group {% if request.endpoint == 'admin.notifications' %}text-white bg-blue-600{% else %}text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700{% endif %}">
+                        <i class="fas fa-bell w-5 h-5"></i>
+                        <span class="ml-3">Notificaciones</span>
+                        <span class="inline-flex items-center justify-center w-5 h-5 p-3 ml-3 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{{ url_for('admin_help') }}" class="flex items-center p-2 rounded-lg group {% if request.endpoint == 'admin.help' %}text-white bg-blue-600{% else %}text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700{% endif %}">
+                        <i class="fas fa-question-circle w-5 h-5"></i>
+                        <span class="ml-3">Ayuda</span>
+                    </a>
+                </li>
+                
+                <!-- Menú desplegable ejemplo -->
+                <li>
+                    <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-settings" data-collapse-toggle="dropdown-settings">
+                        <i class="fas fa-cog w-5 h-5"></i>
+                        <span class="flex-1 ml-3 text-left whitespace-nowrap">Configuración</span>
+                        <i class="fas fa-chevron-down w-4 h-4"></i>
+                    </button>
+                    <ul id="dropdown-settings" class="hidden py-2 space-y-2 pl-8">
+                        <li>
+                            <a href="#" class="flex items-center p-2 rounded-lg group text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                <i class="fas fa-globe w-4 h-4"></i>
+                                <span class="ml-3">General</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center p-2 rounded-lg group text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                <i class="fas fa-lock w-4 h-4"></i>
+                                <span class="ml-3">Seguridad</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <!-- Footer Sidebar -->
+            <div class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
+                <div class="p-2 text-sm text-gray-500 dark:text-gray-400">
+                    <p>Versión 1.0.0</p>
+                    <p class="mt-1">© 2023 Ecommunity</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="p-4 lg:ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen pt-20">
+        <!-- Breadcrumbs -->
+        <nav class="flex mb-4" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                <li class="inline-flex items-center">
+                    <a href="{{ url_for('admin_dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                        <i class="fas fa-home mr-2"></i>
+                        Inicio
+                    </a>
+                </li>
+                {% block breadcrumbs %}{% endblock %}
+            </ol>
+        </nav>
+        
+        <!-- Contenido de la página -->
+        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Terminal -->
+    <div id="terminalContainer" class="fixed bottom-0 right-0 z-40 w-full lg:w-1/2 h-64 bg-gray-900 border-t border-gray-700 transform translate-y-full transition-transform duration-300">
+        <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+            <div class="flex items-center">
+                <i class="fas fa-terminal text-green-400 mr-2"></i>
+                <span class="text-white font-mono">Terminal</span>
+            </div>
+            <button id="closeTerminal" class="text-gray-400 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="terminal" class="h-full w-full p-2"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    
+    <script>
+        // Toggle sidebar en mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        });
+        
+        // Toggle dropdown usuario
+        document.getElementById('userMenuButton').addEventListener('click', function() {
+            document.getElementById('userMenuDropdown').classList.toggle('hidden');
+        });
+        
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenuDropdown');
+            const userButton = document.getElementById('userMenuButton');
+            
+            if (!userButton.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+        
+        // Inicializar dropdowns de Flowbite
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar todos los dropdowns
+            const dropdowns = document.querySelectorAll('[data-collapse-toggle]');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-collapse-toggle');
+                    const target = document.getElementById(targetId);
+                    target.classList.toggle('hidden');
+                    
+                    // Rotar ícono
+                    const icon = this.querySelector('i.fa-chevron-down');
+                    if (icon) {
+                        icon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+            
+            // Terminal
+            const terminalContainer = document.getElementById('terminalContainer');
+            const terminalToggle = document.getElementById('terminalToggle');
+            const closeTerminal = document.getElementById('closeTerminal');
+            
+            // Inicializar terminal
+            const term = new Terminal({
+                cursorBlink: true,
+                theme: {
+                    background: '#111827',
+                    foreground: '#f3f4f6',
+                    cursor: '#3b82f6'
+                }
+            });
+            const fitAddon = new FitAddon.FitAddon();
+            term.loadAddon(fitAddon);
+            term.open(document.getElementById('terminal'));
+            fitAddon.fit();
+            
+            // Comandos básicos del terminal
+            term.write('Bienvenido al terminal de Ecommunity\r\n');
+            term.write('Escribe "help" para ver los comandos disponibles\r\n\r\n');
+            term.write('admin@ecommunity:~$ ');
+            
+            let command = '';
+            term.onData(e => {
+                const printable = !e.charCodeAt(0) || e.charCodeAt(0) >= 32;
+                
+                if (e === '\r') { // Enter
+                    handleCommand(command);
+                    command = '';
+                    term.write('\r\nadmin@ecommunity:~$ ');
+                } else if (e === '\u007F') { // Backspace
+                    if (command.length > 0) {
+                        term.write('\b \b');
+                        command = command.substr(0, command.length - 1);
+                    }
+                } else if (printable) {
+                    term.write(e);
+                    command += e;
+                }
+            });
+            
+            function handleCommand(cmd) {
+                cmd = cmd.trim();
+                if (cmd === 'help') {
+                    term.write('\r\nComandos disponibles:\r\n');
+                    term.write('help - Muestra esta ayuda\r\n');
+                    term.write('clear - Limpia la terminal\r\n');
+                    term.write('version - Muestra la versión del sistema\r\n');
+                } else if (cmd === 'clear') {
+                    term.clear();
+                } else if (cmd === 'version') {
+                    term.write('\r\nEcommunity v1.0.0\r\n');
+                } else if (cmd) {
+                    term.write(`\r\nComando no reconocido: ${cmd}\r\n`);
+                }
+            }
+            
+            // Toggle terminal
+            terminalToggle.addEventListener('click', function() {
+                if (terminalContainer.classList.contains('translate-y-full')) {
+                    terminalContainer.classList.remove('translate-y-full');
+                    term.focus();
+                } else {
+                    terminalContainer.classList.add('translate-y-full');
+                }
+            });
+            
+            // Cerrar terminal
+            closeTerminal.addEventListener('click', function() {
+                terminalContainer.classList.add('translate-y-full');
+            });
+            
+            // Redimensionar terminal cuando cambia el tamaño de la ventana
+            window.addEventListener('resize', function() {
+                fitAddon.fit();
+            });
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

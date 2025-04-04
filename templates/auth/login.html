@@ -1,0 +1,59 @@
+{% extends "auth/base_auth.html" %}
+{% block content %}
+<div class="w-full bg-white rounded-lg shadow-md overflow-hidden p-8">
+    <div class="mb-10 text-center">
+        <h2 class="text-3xl font-bold text-gray-800">Bienvenido a Ecommunity</h2>
+    </div>
+
+    <!-- Mostrar mensajes Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mb-4 p-4 bg-red-50 rounded-lg">
+                <ul class="text-sm text-red-600">
+                    {% for category, message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login') }}" class="space-y-6">
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+            <input 
+                id="email" 
+                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm p-2 border" 
+                type="email" 
+                name="email" 
+                required 
+                placeholder="ejemplo@ecommunity.com"
+            >
+        </div>
+
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input 
+                id="password" 
+                class="block mt-1 w-full rounded-md border-gray-300 shadow-sm p-2 border" 
+                type="password" 
+                name="password" 
+                required 
+                placeholder="••••••••"
+            >
+        </div>
+
+        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded-md flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+            Iniciar Sesión
+        </button>
+
+        <div class="text-center text-sm text-gray-600">
+            ¿No tienes una cuenta?
+            <a href="{{ url_for('register') }}" class="text-indigo-600 hover:text-indigo-500 underline">Regístrate aquí</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
