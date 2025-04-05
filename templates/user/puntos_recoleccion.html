@@ -2,47 +2,193 @@
 
 {% block title %}Puntos de Recolección{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<style>
+  .map-container {
+    height: 500px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  /* Estilos para las tarjetas */
+  .location-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .location-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  .distance-badge {
+    font-size: 0.75rem;
+    background-color: #e6ffed;
+    color: #22863a;
+  }
+  .active-view {
+    background-color: white !important;
+    font-weight: 500;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="bg-white shadow rounded-lg p-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-2">Puntos de Recolección</h1>
-    <p class="text-gray-600 mb-6">Encuentra los puntos de recolección más cercanos a ti y descubre qué tipo de residuos aceptan.</p>
-
-    <!-- Barra de búsqueda y filtros -->
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
-        <div class="flex-grow relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-            </div>
-            <input type="search" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Buscar por ubicación o nombre">
-        </div>
-        <button class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-            Filtros
-        </button>
-        <div class="flex bg-gray-100 rounded-md p-1">
-            <button class="px-3 py-1 text-sm font-medium rounded-md bg-white text-gray-700">Mapa</button>
-            <button class="px-3 py-1 text-sm font-medium rounded-md text-gray-700">Lista</button>
-        </div>
+  <h1 class="text-2xl font-bold text-gray-800 mb-2">Puntos de Recolección</h1>
+  <p class="text-gray-600 mb-6">Encuentra los puntos de recolección más cercanos a ti y descubre qué tipo de residuos aceptan.</p>
+  
+  <!-- Barra de búsqueda y filtros -->
+  <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <div class="flex-grow relative">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+      <input type="search" id="search-input" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md bg-white placeholder-gray-500 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" placeholder="Buscar por nombre o dirección">
     </div>
-
-    <!-- Mapa (placeholder) -->
-    <div class="bg-gray-200 rounded-lg h-96 mb-6" style="background-image: url('https://carbootdirectory.co.uk/wp-content/uploads/2022/11/BrickLaneMarket.jpg'); background-size: cover; background-position: center;"></div>
-
-    <!-- Lista de puntos -->
-    <div class="space-y-4">
-        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <h3 class="font-medium">Centro de Reciclaje Alcanfores</h3>
-            <p class="text-sm text-gray-600">Acepta: Plástico, Papel, Vidrio, Metal</p>
-            <p class="text-sm text-gray-500 mt-2 flex items-center">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                Parque Alcanfores, Querétaro
-            </p>
-            <span class="inline-block mt-2 px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full">0.8 km</span>
-        </div>
+    <button id="filter-btn" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+      Filtros
+    </button>
+    <div class="flex bg-gray-100 rounded-md p-1">
+      <button id="map-view-btn" class="px-3 py-1 text-sm font-medium rounded-md active-view">Mapa</button>
+      <button id="list-view-btn" class="px-3 py-1 text-sm font-medium rounded-md">Lista</button>
     </div>
+  </div>
+  
+  <!-- Contenedor del mapa -->
+  <div id="map-container" class="map-container"></div>
+  
+  <!-- Lista de puntos (tarjetas) -->
+  <div id="locations-list" class="space-y-4 hidden"></div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar el mapa centrado en Querétaro
+  const map = L.map('map-container').setView([20.588793, -100.389888], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  
+  // Definir los puntos de recolección (datos estáticos)
+  const puntosRecoleccion = [
+    {
+      nombre: "Centro de Reciclaje Alcanfores",
+      direccion: "Parque Alcanfores, Querétaro",
+      materiales: "Plástico, Papel, Vidrio, Metal",
+      lat: 20.588793,
+      lng: -100.389888,
+      distancia: 0.8
+    },
+    {
+      nombre: "Punto de Recolección 2",
+      direccion: "Calle Falsa 123, Querétaro",
+      materiales: "Papel, Vidrio",
+      lat: 20.59,
+      lng: -100.39,
+      distancia: 1.2
+    }
+    // Agrega más puntos según sea necesario
+  ];
+  
+  // Ícono personalizado para marcadores
+  const markerIcon = L.icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/3063/3063188.png',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+  });
+  
+  // Agregar marcadores y crear tarjetas
+  const locationsList = document.getElementById('locations-list');
+  puntosRecoleccion.forEach(punto => {
+    // Agregar marcador
+    const marker = L.marker([punto.lat, punto.lng], { icon: markerIcon }).addTo(map);
+    marker.bindPopup(`
+      <strong>${punto.nombre}</strong><br>
+      ${punto.direccion}<br>
+      <em>Acepta: ${punto.materiales}</em><br>
+      ${punto.distancia ? `<small>${punto.distancia.toFixed(2)} km</small>` : ''}
+    `);
+    
+    // Crear tarjeta
+    const card = document.createElement('div');
+    card.className = 'location-card border border-gray-200 rounded-lg p-4';
+    card.dataset.lat = punto.lat;
+    card.dataset.lng = punto.lng;
+    card.innerHTML = `
+      <h3 class="font-medium">${punto.nombre}</h3>
+      <p class="text-sm text-gray-600">Acepta: ${punto.materiales}</p>
+      <p class="text-sm text-gray-500 mt-2 flex items-center">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        ${punto.direccion}
+      </p>
+      ${punto.distancia ? `<span class="distance-badge inline-block mt-2 px-2 py-1 text-xs font-semibold rounded-full">${punto.distancia.toFixed(2)} km</span>` : ''}
+    `;
+    // Al hacer clic en la tarjeta, centra el mapa y abre el popup
+    card.addEventListener('click', function() {
+      const lat = parseFloat(this.dataset.lat);
+      const lng = parseFloat(this.dataset.lng);
+      map.setView([lat, lng], 15);
+      map.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+          const pos = layer.getLatLng();
+          if (pos.lat === lat && pos.lng === lng) {
+            layer.openPopup();
+          }
+        }
+      });
+      // Cambia a vista de mapa
+      mapViewBtn.click();
+    });
+    locationsList.appendChild(card);
+  });
+  
+  // Controladores para alternar entre vista de mapa y lista
+  const mapViewBtn = document.getElementById('map-view-btn');
+  const listViewBtn = document.getElementById('list-view-btn');
+  const mapContainer = document.getElementById('map-container');
+  
+  mapViewBtn.addEventListener('click', function() {
+    mapContainer.classList.remove('hidden');
+    locationsList.classList.add('hidden');
+    this.classList.add('active-view');
+    listViewBtn.classList.remove('active-view');
+    // Recalcula el tamaño del mapa
+    setTimeout(() => { map.invalidateSize(); }, 100);
+  });
+  
+  listViewBtn.addEventListener('click', function() {
+    mapContainer.classList.add('hidden');
+    locationsList.classList.remove('hidden');
+    this.classList.add('active-view');
+    mapViewBtn.classList.remove('active-view');
+  });
+  
+  // Buscador: filtra las tarjetas en tiempo real
+  const searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('.location-card').forEach(card => {
+      const nombre = card.querySelector('h3').textContent.toLowerCase();
+      const direccion = card.querySelector('p').textContent.toLowerCase();
+      if (nombre.indexOf(query) !== -1 || direccion.indexOf(query) !== -1) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+  
+  // Activar la vista de mapa por defecto
+  mapViewBtn.click();
+});
+</script>
 {% endblock %}
