@@ -1,28 +1,97 @@
-from functools import wraps
 from flask import Flask, render_template, request, redirect, session, url_for, flash
-from flask_login import login_required
 import requests
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', 'secret-key-default')
-API_BASE_URL = os.getenv('FASTAPI_URL', 'http://localhost:8000')
+app.secret_key = "tu_clave_secreta"  # Define tu clave secreta aquí
+API_BASE_URL = "http://127.0.0.1:9000"  # FastAPI corriendo en el puerto 9000
+#API_BASE_URL = "https://apieccommunity-production.up.railway.app" #hosting en Railway
+
 
 # ------------ Rutas Públicas ------------
+
 @app.route('/')
 def index():
     return render_template('auth/login.html')
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return render_template('auth/login.html')
+    if request.method == "POST":
+        # Obtener datos del formulario
+        email = request.form.get("email")
+        password = request.form.get("password")
 
-@app.route('/register')
+        # Preparar payload para FastAPI
+        payload = {
+            "Correo": email,
+            "contrasena": password
+        }
+
+        try:
+            # Hacer request a FastAPI (deberías tener un endpoint /login o similar)
+            response = requests.post(f"{API_BASE_URL}/usuarios/login", json=payload)
+
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as http_err:
+            flash(f"Error al iniciar sesión: {http_err}", "danger")
+            return redirect(url_for("login"))
+        except Exception as err:
+            flash(f"Ocurrió un error: {err}", "danger")
+            return redirect(url_for("login"))
+
+        # Si el login fue exitoso, redirige al dashboard
+        session["user"] = response.json()  # o guarda token, etc.
+        flash("Bienvenido/a de nuevo", "success")
+        return redirect(url_for("dashboard"))
+
+    # Si es GET, renderiza la vista
+    return render_template("auth/login.html")
+
+
+# Ruta de registro actualizada para GET y POST
+@app.route('/register', methods=["GET", "POST"])
 def register():
-    return render_template('auth/register.html')
+    if request.method == "POST":
+        # Obtener datos del formulario
+        name = request.form.get("name")
+        email = request.form.get("email")
+        role = request.form.get("role")
+        password = request.form.get("password")
+        password_confirmation = request.form.get("password_confirmation")
+
+        # Validar que las contraseñas coincidan
+        if password != password_confirmation:
+            flash("Las contraseñas no coinciden", "danger")
+            return redirect(url_for("register"))
+
+        # ✅ Aquí está el payload con los nombres que espera FastAPI
+        payload = {
+            "Nombre": name,
+            "Correo": email,
+            "Ubicacion": "desconocido",
+            "Rol": role,
+            "Estado": "activo",
+            "Cooldown": "0",
+            "url_perfil": "default.jpg",
+            "contrasena": password
+        }
+
+        try:
+            response = requests.post(f"{API_BASE_URL}/usuarios", json=payload)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as http_err:
+            flash(f"Error en el registro (HTTP): {http_err}", "danger")
+            return redirect(url_for("register"))
+        except Exception as err:
+            flash(f"Error en el registro: {err}", "danger")
+            return redirect(url_for("register"))
+
+        flash("Usuario registrado exitosamente. Ahora puedes iniciar sesión.", "success")
+        return redirect(url_for("login"))
+
+    return render_template("auth/register.html")
 
 @app.route('/logout')
 def auth_logout():
@@ -30,7 +99,8 @@ def auth_logout():
     flash('Has cerrado sesión correctamente', 'success')
     return redirect(url_for('login'))
 
-# Rutas de usuario (requieren autenticación)
+# ------------ Rutas de usuario (requieren autenticación) ------------
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('user/dashboard.html')
@@ -55,15 +125,95 @@ def perfil():
 def configuracion():
     return render_template('user/configuracion.html')
 
-# Rutas de administración
+# ------------ Rutas de administración ------------
+
 @app.route('/admin')
 def admin_dashboard():
     return render_template('admin/dashboard.html')
 
-
 @app.route('/admin/usuarios')
 def admin_users():
-    return render_template('admin/dashboard_users.html')
+    try:
+        response = requests.get(f"{API_BASE_URL}/usuarios")
+        response.raise_for_status()
+        usuarios = response.json()
+    except Exception as e:
+        flash(f"Error al cargar usuarios: {e}", "danger")
+        usuarios = []
+
+    return render_template('admin/dashboard_users.html', usuarios=usuarios)
+
+@app.route('/admin/usuarios/crear', methods=["GET", "POST"])
+def crear_usuario():
+    if request.method == "POST":
+        data = {
+            "Nombre": request.form.get("nombre"),
+            "Correo": request.form.get("correo"),
+            "Ubicacion": request.form.get("ubicacion"),
+            "Rol": request.form.get("rol"),
+            "Estado": request.form.get("estado"),
+            "Cooldown": "0",
+            "url_perfil": "default.jpg",
+            "contrasena": request.form.get("contrasena")
+        }
+
+        try:
+            response = requests.post(f"{API_BASE_URL}/usuarios", json=data)
+            response.raise_for_status()
+            flash("Usuario creado exitosamente", "success")
+        except Exception as e:
+            flash(f"Error al crear usuario: {e}", "danger")
+
+        return redirect(url_for("admin_users"))
+
+    return render_template("admin/form_usuario.html", modo="crear")
+
+@app.route('/admin/usuarios/editar/<int:id>', methods=["GET", "POST"])
+def editar_usuario(id):
+    if request.method == "POST":
+        data = {
+            "Nombre": request.form.get("nombre"),
+            "Ubicacion": request.form.get("ubicacion"),
+            "Rol": request.form.get("rol"),
+            "Estado": request.form.get("estado"),
+            "Cooldown": request.form.get("cooldown"),
+            "url_perfil": request.form.get("url_perfil"),
+        }
+
+        try:
+            response = requests.put(f"{API_BASE_URL}/usuarios/{id}", json=data)
+            response.raise_for_status()
+            flash("Usuario actualizado correctamente", "success")
+        except Exception as e:
+            flash(f"Error al actualizar usuario: {e}", "danger")
+
+        return redirect(url_for("admin_users"))
+
+    try:
+        response = requests.get(f"{API_BASE_URL}/usuarios/{id}")
+        response.raise_for_status()
+        usuario = response.json()
+    except Exception as e:
+        flash(f"No se pudo cargar el usuario: {e}", "danger")
+        return redirect(url_for("admin_users"))
+
+    return render_template("admin/form_usuario.html", usuario=usuario, modo="editar")
+
+@app.route('/admin/usuarios/eliminar/<int:id>', methods=["POST"])
+def eliminar_usuario(id):
+    try:
+        response = requests.post(f"{API_BASE_URL}/usuarios/{id}/delete")  # <-- este endpoint acepta POST
+        response.raise_for_status()
+        flash("Usuario eliminado correctamente", "success")
+    except Exception as e:
+        flash(f"No se pudo eliminar el usuario: {e}", "danger")
+
+    return redirect(url_for("admin_users"))
+
+
+
+
+
 
 @app.route('/admin/empresas')
 def admin_companies():
@@ -84,7 +234,6 @@ def admin_notifications():
 @app.route('/admin/ayuda')
 def admin_help():
     return render_template('admin/dashboard_help.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

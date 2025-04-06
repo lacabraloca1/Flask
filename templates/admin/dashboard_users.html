@@ -9,12 +9,11 @@
             <p class="text-gray-600 dark:text-gray-400 mt-1">Administra los usuarios del sistema</p>
         </div>
         <div class="mt-4 md:mt-0">
-            <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
+            <a href="{{ url_for('crear_usuario') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                <!-- svg... -->
                 Nuevo Usuario
-            </button>
+            </a>
+            
         </div>
     </div>
 
@@ -58,7 +57,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    <!-- Ejemplo de fila -->
+                    {% for usuario in usuarios %}
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
@@ -70,23 +69,36 @@
                                     </div>
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900 dark:text-white">Nombre Usuario</div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">@username</div>
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">{{ usuario.Nombre }}</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">@{{ usuario.Correo.split('@')[0] }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">email@ejemplo.com</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">Usuario</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ usuario.Correo }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ usuario.Rol | capitalize }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Activo</span>
+                            {% if usuario.Estado == 'activo' %}
+                                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">Activo</span>
+                            {% else %}
+                                <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">Inactivo</span>
+                            {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="#" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">Editar</a>
-                            <a href="#" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Eliminar</a>
+                            <a href="{{ url_for('editar_usuario', id=usuario.Id) }}" class="text-blue-600">Editar</a>
+                            <form method="POST" action="{{ url_for('eliminar_usuario', id=usuario.Id) }}" onsubmit="return confirm('¿Estás seguro de eliminar este usuario?');">
+                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 bg-transparent border-none">Eliminar</button>
+                            </form>
+                            
+                            
                         </td>
                     </tr>
-                    <!-- Más filas -->
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center px-6 py-4 text-gray-500 dark:text-gray-400">No se encontraron usuarios.</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
+                
             </table>
         </div>
 
