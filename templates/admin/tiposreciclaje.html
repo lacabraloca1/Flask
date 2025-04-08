@@ -1,0 +1,55 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+<div class="mt-10 px-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Gestión de Tipos de Reciclaje</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">Administra los materiales reciclables</p>
+        </div>
+        <div class="mt-4 md:mt-0">
+            <a href="{{ url_for('crear_tipo_reciclaje') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                Nuevo Tipo
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">Nombre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">Peso Mínimo</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">Peso Máximo</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">Pago x Kg</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300">Ganancia x Kg</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {% for tipo in tipos %}
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td class="px-6 py-4 whitespace-nowrap">{{ tipo.Nombre }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ tipo.PesoMinimo }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ tipo.PesoMaximo }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${{ tipo.PagoPorKg }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${{ tipo.GananciaPorKg }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="{{ url_for('editar_tipo_reciclaje', id=tipo.Id) }}" class="text-blue-600 hover:underline">Editar</a>
+                            <form method="POST" action="{{ url_for('eliminar_tipo_reciclaje', id=tipo.Id) }}" class="inline-block" onsubmit="return confirm('¿Eliminar este tipo?');">
+                                <button type="submit" class="text-red-600 hover:underline ml-2">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center px-6 py-4 text-gray-500 dark:text-gray-400">No hay tipos de reciclaje registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

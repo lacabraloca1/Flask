@@ -1,0 +1,46 @@
+{% extends "base_admin.html" %}
+{% block content %}
+<div class="mt-10 px-6 max-w-3xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">{{ "Editar Usuario" if modo == "editar" else "Nuevo Usuario" }}</h1>
+    <form method="POST">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label>Nombre</label>
+                <input type="text" name="nombre" value="{{ usuario.Nombre if usuario else '' }}" required class="input">
+            </div>
+            <div>
+                <label>Correo</label>
+                <input type="email" name="correo" value="{{ usuario.Correo if usuario else '' }}" required class="input" {% if modo == "editar" %}readonly{% endif %}>
+            </div>
+            <div>
+                <label>Ubicación</label>
+                <input type="text" name="ubicacion" value="{{ usuario.Ubicacion if usuario else '' }}" class="input">
+            </div>
+            <div>
+                <label>Rol</label>
+                <select name="rol" class="input">
+                    <option value="usuario" {% if usuario and usuario.Rol == 'usuario' %}selected{% endif %}>Usuario</option>
+                    <option value="admin" {% if usuario and usuario.Rol == 'admin' %}selected{% endif %}>Administrador</option>
+                </select>
+            </div>
+            <div>
+                <label>Estado</label>
+                <select name="estado" class="input">
+                    <option value="activo" {% if usuario and usuario.Estado == 'activo' %}selected{% endif %}>Activo</option>
+                    <option value="inactivo" {% if usuario and usuario.Estado == 'inactivo' %}selected{% endif %}>Inactivo</option>
+                </select>
+            </div>
+            {% if modo == "crear" %}
+            <div>
+                <label>Contraseña</label>
+                <input type="password" name="contrasena" required class="input">
+            </div>
+            {% endif %}
+        </div>
+        <div class="mt-6">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">{{ "Actualizar" if modo == "editar" else "Crear" }}</button>
+            <a href="{{ url_for('admin_users') }}" class="ml-3 text-sm text-gray-600 hover:underline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

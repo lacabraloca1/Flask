@@ -210,8 +210,83 @@ def eliminar_usuario(id):
 
     return redirect(url_for("admin_users"))
 
+@app.route('/admin/tiposreciclaje')
+def admin_tiposreciclaje():
+    try:
+        response = requests.get(f"{API_BASE_URL}/tipos_reciclaje")
+        response.raise_for_status()
+        tipos = response.json()
+    except Exception as e:
+        flash(f"Error al cargar tipos de reciclaje: {e}", "danger")
+        tipos = []
 
+    return render_template('admin/tiposreciclaje.html', tipos=tipos)
 
+# Crear nuevo tipo de reciclaje
+@app.route('/admin/tiposreciclaje/crear', methods=["GET", "POST"])
+def crear_tipo_reciclaje():
+    if request.method == "POST":
+        data = {
+            "Nombre": request.form.get("nombre"),
+            "PesoMinimo": request.form.get("peso_minimo"),
+            "PesoMaximo": request.form.get("peso_maximo"),
+            "PagoPorKg": request.form.get("pago_por_kg"),
+            "GananciaPorKg": request.form.get("ganancia_por_kg")
+        }
+
+        try:
+            response = requests.post(f"{API_BASE_URL}/tipos_reciclaje", json=data)
+            response.raise_for_status()
+            flash("Tipo de reciclaje creado exitosamente", "success")
+        except Exception as e:
+            flash(f"Error al crear tipo: {e}", "danger")
+
+        return redirect(url_for("admin_tiposreciclaje"))
+
+    return render_template("admin/form_tiposdereciclaje.html", modo="crear")
+
+# Editar tipo de reciclaje
+@app.route('/admin/tiposreciclaje/editar/<int:id>', methods=["GET", "POST"])
+def editar_tipo_reciclaje(id):
+    if request.method == "POST":
+        data = {
+            "Nombre": request.form.get("nombre"),
+            "PesoMinimo": request.form.get("peso_minimo"),
+            "PesoMaximo": request.form.get("peso_maximo"),
+            "PagoPorKg": request.form.get("pago_por_kg"),
+            "GananciaPorKg": request.form.get("ganancia_por_kg")
+        }
+
+        try:
+            response = requests.put(f"{API_BASE_URL}/tipos_reciclaje/{id}", json=data)
+            response.raise_for_status()
+            flash("Tipo actualizado correctamente", "success")
+        except Exception as e:
+            flash(f"Error al actualizar tipo: {e}", "danger")
+
+        return redirect(url_for("admin_tiposreciclaje"))
+
+    try:
+        response = requests.get(f"{API_BASE_URL}/tipos_reciclaje/{id}")
+        response.raise_for_status()
+        tipo = response.json()
+    except Exception as e:
+        flash(f"No se pudo cargar el tipo: {e}", "danger")
+        return redirect(url_for("admin_tiposreciclaje"))
+
+    return render_template("admin/form_tiposdereciclaje.html", tipo=tipo, modo="editar")
+
+# Eliminar tipo
+@app.route('/admin/tiposreciclaje/eliminar/<int:id>', methods=["POST"])
+def eliminar_tipo_reciclaje(id):
+    try:
+        response = requests.delete(f"{API_BASE_URL}/tipos_reciclaje/{id}")
+        response.raise_for_status()
+        flash("Tipo eliminado correctamente", "success")
+    except Exception as e:
+        flash(f"No se pudo eliminar el tipo: {e}", "danger")
+
+    return redirect(url_for("admin_tiposreciclaje"))
 
 
 
